@@ -1,0 +1,109 @@
+# ── AIDTECT v3.0 COMPLETE REQUIREMENTS ──────────────────────────────
+
+# Core ML
+torch
+torchvision
+transformers
+datasets
+tokenizers
+scikit-learn
+xgboost
+imbalanced-learn
+
+# Computer Vision
+opencv-python-headless
+Pillow
+ultralytics
+imagehash
+open-clip-torch
+
+# NLP
+nltk
+tldextract
+urlextract
+
+# Malware Analysis
+lief
+pefile
+yara-python
+
+# Explainability
+shap
+captum
+
+# Drift Detection
+evidently
+scipy
+
+# FastAPI
+fastapi
+uvicorn[standard]
+websockets
+pydantic
+pydantic-settings
+python-multipart
+
+# Security
+python-jose[cryptography]
+passlib[bcrypt]
+
+# Database
+sqlalchemy
+alembic
+psycopg2-binary
+asyncpg
+
+# Cache
+redis
+hiredis
+
+# Monitoring
+mlflow
+prometheus-client
+loguru
+opentelemetry-sdk
+
+# Utilities
+python-dotenv
+numpy
+pandas
+tqdm
+tenacity
+circuitbreaker
+slowapi
+httpx
+
+# Fusion
+tab-transformer-pytorch
+
+# Threat Intelligence
+neo4j
+stix2
+vt-py
+crowdstrike-falconpy
+mitreattack-python
+pyvis
+
+# Adversarial ML
+textattack
+
+# Federated Learning
+flwr
+
+# Reports
+reportlab
+
+# Browser Automation
+playwright
+
+# Scraping
+beautifulsoup4
+lxml
+
+# Testing
+pytest
+pytest-asyncio
+
+# Formatting
+black
+flake8

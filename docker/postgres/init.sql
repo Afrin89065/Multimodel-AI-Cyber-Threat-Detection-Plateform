@@ -1,0 +1,5 @@
+CREATE DATABASE mlflow_db;
+GRANT ALL PRIVILEGES ON DATABASE aidtect_db TO aidtect;
+GRANT ALL PRIVILEGES ON DATABASE mlflow_db TO aidtect;
+\c aidtect_db
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

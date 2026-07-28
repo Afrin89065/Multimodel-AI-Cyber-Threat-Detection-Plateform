@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environment
+venv/
+venv311/
+
+# Environment Files
+.env
+*.env
+
+# Models
+models/*.pt
+models/*.pth
+models/*.bin
+
+# Dataset
+datasets/raw/
+datasets/processed/
+
+# Logs
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
