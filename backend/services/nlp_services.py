@@ -5,6 +5,7 @@ import tldextract
 import math
 import re
 import hashlib
+import pickle
 from transformers import AutoTokenizer, AutoModel
 from pathlib import Path
 from loguru import logger
@@ -123,21 +124,67 @@ def extract_url_features(url: str) -> np.ndarray:
 
 
 class NLPService:
-    def __init__(self, model_path: str):
-        # v3 CHANGE: AutoTokenizer with SecureBERT
-        self.tokenizer = AutoTokenizer.from_pretrained(SECUREBERT_MODEL)
-        self.model = NLPClassifier()
+    """
+    v3 FIX: two operating modes.
+
+    "full" mode: the original SecureBERT-based NLPClassifier, loaded from a
+    .pt state_dict at `model_path`. This is what should run in production.
+
+    "lite" mode: falls back to a plain sklearn classifier operating on the
+    same 25-dim extract_url_features() vector this module already computes,
+    used automatically when `model_path` doesn't exist and `lite_model_path`
+    does. It has no text-semantics understanding at all (URL structure
+    signals only) and is meant to keep the pipeline functional — not as a
+    long-term substitute for the transformer model. Every response makes
+    the active mode explicit via "model_mode" so this is never silently
+    mistaken for the real thing downstream (dashboard, fusion, audit log).
+
+    Neither of the two training scripts in scripts/training/ (train_nlp.py,
+    train_nlp_simple.py) previously produced a checkpoint that actually
+    matched either of these code paths — see CHANGELOG for the fixes to
+    both.
+    """
+
+    def __init__(self, model_path: str, lite_model_path: Optional[str] = None):
+        self.mode = "uninitialised"
+        self.lite_model = None
+        self.tokenizer = None
+        self.model = None
+
         if Path(model_path).exists():
+            # v3 CHANGE: AutoTokenizer with SecureBERT
+            self.tokenizer = AutoTokenizer.from_pretrained(SECUREBERT_MODEL)
+            self.model = NLPClassifier()
             state = torch.load(model_path, map_location="cpu")
             # Handle both fp16 and fp32 checkpoints
             self.model.load_state_dict(
                 {k: v.float() if v.dtype == torch.float16 else v
                  for k, v in state.items()}
             )
-            logger.info(f"NLP model loaded: {model_path}")
+            self.model.eval()
+            self.mode = "full"
+            logger.info(f"NLP model loaded (full/SecureBERT): {model_path}")
+        elif lite_model_path and Path(lite_model_path).exists():
+            with open(lite_model_path, "rb") as f:
+                self.lite_model = pickle.load(f)
+            self.mode = "lite"
+            logger.warning(
+                f"NLP full model not found at {model_path}. Running in LITE "
+                f"mode from {lite_model_path} — URL-structure heuristics "
+                f"only, no email/text semantic understanding. Train and "
+                f"deploy the SecureBERT checkpoint (scripts/training/"
+                f"train_nlp.py) for production use."
+            )
         else:
-            logger.warning(f"NLP model not found at {model_path}, using random weights")
-        self.model.eval()
+            self.tokenizer = AutoTokenizer.from_pretrained(SECUREBERT_MODEL)
+            self.model = NLPClassifier()
+            self.model.eval()
+            self.mode = "full_untrained"
+            logger.warning(
+                f"NLP model not found at {model_path} and no lite_model_path "
+                f"given — using randomly-initialised weights. Predictions "
+                f"are meaningless until a real checkpoint is trained."
+            )
 
     def _encode(self, text: str, url: str):
         enc = self.tokenizer(
@@ -150,9 +197,39 @@ class NLPService:
         ).unsqueeze(0)
         return enc["input_ids"], enc["attention_mask"], url_feat
 
+    def _analyse_lite(self, url: str) -> dict:
+        feats = extract_url_features(url).reshape(1, -1)
+        probs_bin = self.lite_model.predict_proba(feats)[0]  # [P(benign), P(phishing)]
+        phishing_p = float(probs_bin[-1])
+        idx = 1 if phishing_p >= 0.5 else 0
+        # Map the lite model's binary output onto the full 4-class label
+        # space so downstream consumers (fusion, dashboard) see a consistent
+        # schema regardless of which mode produced it.
+        class_probs = {l: 0.0 for l in LABELS}
+        class_probs["CLEAN"] = round(1.0 - phishing_p, 4)
+        class_probs["PHISHING"] = round(phishing_p, 4)
+        return {
+            "nlp_score": round(phishing_p, 4),
+            "threat_type": "PHISHING" if idx == 1 else "CLEAN",
+            "confidence": round(max(phishing_p, 1 - phishing_p), 4),
+            "uncertainty": None,
+            "is_uncertain": None,
+            "class_probs": class_probs,
+            "url_features": {
+                name: round(float(v), 3)
+                for name, v in zip(URL_FEATURE_NAMES, extract_url_features(url))
+            },
+            "model_mode": "lite",
+        }
+
     @torch.no_grad()
     def analyse(self, text: str, url: str = "", use_uncertainty: bool = True) -> dict:
         with timer("nlp"):
+            if self.mode == "lite":
+                result = self._analyse_lite(url)
+                MODEL_CONFIDENCE.labels(module="nlp").set(result["confidence"])
+                return result
+
             ids, mask, url_feat = self._encode(text, url)
 
             if use_uncertainty:
@@ -186,5 +263,6 @@ class NLPService:
                         URL_FEATURE_NAMES,
                         extract_url_features(url)
                     )
-                }
+                },
+                "model_mode": self.mode,
             }

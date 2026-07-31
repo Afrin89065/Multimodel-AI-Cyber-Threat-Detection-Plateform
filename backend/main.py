@@ -38,16 +38,16 @@ async def lifespan(app: FastAPI):
     logger.info("✅ PostgreSQL + Redis connected")
 
     logger.info("Loading AI models — please wait 30-60 seconds...")
-    from services.nlp_service import NLPService
-    from services.vision_service import VisionService
-    from services.network_service import NetworkService
+    from services.nlp_services import NLPService
+    from services.vision_services import VisionService
+    from services.network_services import NetworkService
     from services.malware_service import MalwareService
     from services.fusion_service import FusionService
     from services.drift_service import DriftService
     from services.graceful_degradation import wrap_all_models
 
     raw_models = {
-        "nlp":     NLPService(settings.NLP_MODEL_PATH),
+        "nlp":     NLPService(settings.NLP_MODEL_PATH, settings.NLP_LITE_MODEL_PATH),
         "vision":  VisionService(settings.VISION_CLF_PATH, settings.YOLO_PATH, settings.PHASH_DB_PATH),
         "network": NetworkService(settings.NETWORK_XGB_PATH, settings.NETWORK_ISO_PATH,
                                   settings.NETWORK_SCALER_PATH, settings.NETWORK_FEATURES_PATH),

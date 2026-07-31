@@ -26,6 +26,39 @@ export interface ThreatEvent {
   uncertainties?: Uncertainties;
   needs_human_review?: boolean;
   analyst_verdict?: string;
+  // v3 FIX: these already exist on the ThreatEvent DB row
+  // (backend/models/db_models.py) and are already returned by
+  // GET /dashboard/events (SELECT *) — just weren't declared here, so
+  // nothing on the frontend could read them.
+  network_result?: {
+    drift_check?: {
+      drift_detected: boolean;
+      psi_score: number;
+      drifted_features: { feature: string; psi: number }[];
+      recommendation: string;
+      module: string;
+    };
+    [key: string]: any;
+  };
+  nlp_result?: Record<string, any>;
+  vision_result?: Record<string, any>;
+  malware_result?: Record<string, any>;
+  fusion_result?: {
+    mitre_tags?: string[];
+    mitre_tactics?: string[];
+    [key: string]: any;
+  };
+  shap_values?: Record<string, any> | null;
+  counterfactual?: Record<string, any> | null;
+  // Present only on live websocket messages (see fusion.py's broadcast),
+  // not on rows fetched from /dashboard/events — optional accordingly.
+  drift_check?: {
+    drift_detected: boolean;
+    psi_score: number;
+    drifted_features: { feature: string; psi: number }[];
+    recommendation: string;
+    module: string;
+  } | null;
 }
 
 export interface DashboardStats {

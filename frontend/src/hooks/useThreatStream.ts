@@ -4,7 +4,14 @@ import { addLiveEvent, setWsConnected } from "../store/slices/threatSlice";
 import { RootState } from "../store";
 import toast from "react-hot-toast";
 
-const WS_URL = process.env.REACT_APP_WS_URL || "ws://localhost:8000/api/v1/ws/soc";
+// v3 FIX: was "ws://localhost:8000/api/v1/ws/soc" — that route doesn't
+// exist. The backend's actual websocket route is /ws/threats
+// (backend/api/routes/dashboard.py); "soc" is only the internal pub/sub
+// room name (ws_manager.connect(websocket, room="soc")), not a URL path.
+// This meant the live feed silently never connected — onclose just kept
+// retrying against a 404 forever, with no visible error to the user beyond
+// the "OFFLINE" badge.
+const WS_URL = process.env.REACT_APP_WS_URL || "ws://localhost:8000/api/v1/ws/threats";
 
 export function useThreatStream() {
   const dispatch = useDispatch();

@@ -56,4 +56,4 @@ def require_role(minimum_role: str):
                 detail=f"Role '{minimum_role}' or higher required"
             )
         return current_user
-    return checkers
+    return checker

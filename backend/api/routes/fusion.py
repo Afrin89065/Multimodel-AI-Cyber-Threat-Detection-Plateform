@@ -43,6 +43,16 @@ async def full_analysis(
     if body.network_features:
         network_result = body.network_result or models["network"].analyse(body.network_features, compute_shap=False)
         INFERENCE_TOTAL.labels(module="network", status="success").inc()
+        # v3 FIX: drift checking previously only happened in the standalone
+        # /analyse/network route, so DriftAlert on the dashboard never had
+        # data to show — network_result (and therefore the persisted
+        # ThreatEvent row and the live websocket feed) never included it.
+        try:
+            import numpy as np
+            X = np.array(body.network_features, dtype=np.float32).reshape(1, -1)
+            network_result["drift_check"] = models["drift"].check_drift(X)
+        except Exception as e:
+            logger.warning(f"Drift check failed: {e}")
 
     if body.url and not body.vision_result:
         svc = getattr(request.app.state, "screenshot_svc", None)
@@ -149,6 +159,8 @@ async def full_analysis(
         "attention_weights": fusion_result.get("attention_weights"),
         "mitre_tags": fusion_result.get("mitre_tags", []),
         "needs_human_review": fusion_result.get("needs_human_review", False),
+        # v3 FIX: was computed (see above) but never actually sent anywhere
+        "drift_check": (network_result or {}).get("drift_check"),
     }, room="soc")
 
     notif_svc = getattr(request.app.state, "notifications", None)

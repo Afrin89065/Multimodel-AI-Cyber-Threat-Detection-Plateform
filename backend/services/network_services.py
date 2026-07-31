@@ -15,6 +15,17 @@ except ImportError:
     TAB_AVAILABLE = False
     logger.warning("tab-transformer-pytorch not installed — XGBoost only")
 
+# v3 FIX: previously hardcoded to 4 classes. The trained model in
+# models_store/network/xgb_nids_v2.pkl reports 7 classes via
+# `.classes_`. We don't have ground-truth names for classes beyond the
+# original 4 (the label→name mapping lived in whatever raw dataset produced
+# network_model.pkl, which isn't in this repo) — guessing wrong names here
+# would be actively dangerous (a SOC analyst could see a mislabeled attack
+# class and dismiss it as benign). So class names default to this list for
+# backward compatibility, and NetworkService._resolve_class_names() extends
+# it with clearly-marked placeholders for any classes the model reports
+# beyond what we have real names for. Replace the placeholders with real
+# names in this list as soon as you know the original label encoding.
 ATTACK_CLASSES = ["BENIGN", "DDoS", "PortScan", "BruteForce"]
 
 
@@ -25,6 +36,7 @@ class NetworkService:
             pickle.load(open(xgb_path, "rb"))
             if Path(xgb_path).exists() else None
         )
+        self.class_names = self._resolve_class_names()
         self.iso = (
             pickle.load(open(iso_path, "rb"))
             if Path(iso_path).exists() else None
@@ -68,6 +80,35 @@ class NetworkService:
                 logger.warning(f"TabTransformer load failed: {e}")
 
         logger.info("Network Service ready")
+
+    def _resolve_class_names(self) -> list:
+        """
+        Build a class-name list matching self.xgb.classes_'s length.
+        Uses the known ATTACK_CLASSES names for indices we're confident
+        about, and clearly-flagged placeholders for anything beyond that,
+        rather than silently guessing.
+        """
+        n_classes = (
+            len(self.xgb.classes_)
+            if self.xgb is not None and hasattr(self.xgb, "classes_")
+            else len(ATTACK_CLASSES)
+        )
+        if n_classes == len(ATTACK_CLASSES):
+            return list(ATTACK_CLASSES)
+
+        names = list(ATTACK_CLASSES[:n_classes])
+        while len(names) < n_classes:
+            names.append(f"UNVERIFIED_CLASS_{len(names)}")
+        logger.warning(
+            f"Loaded network model reports {n_classes} classes but only "
+            f"{len(ATTACK_CLASSES)} have confirmed names ({ATTACK_CLASSES}). "
+            f"Classes {names[len(ATTACK_CLASSES):]} are placeholders — verify "
+            f"the real label encoding used when this model was trained and "
+            f"update ATTACK_CLASSES in network_services.py accordingly. "
+            f"Until then, do not treat UNVERIFIED_CLASS_N predictions as "
+            f"benign or dismiss them in the SOC dashboard."
+        )
+        return names
 
     def analyse(self, features: list, compute_shap: bool = True) -> dict:
         with timer("network"):
@@ -137,11 +178,11 @@ class NetworkService:
 
             return {
                 "network_score": round(net_score, 4),
-                "attack_class": ATTACK_CLASSES[pred_idx],
+                "attack_class": self.class_names[pred_idx],
                 "confidence": round(confidence, 4),
                 "uncertainty": round(1.0 - confidence, 4),
                 "class_probs": {
-                    ATTACK_CLASSES[i]: round(float(p), 4)
+                    self.class_names[i]: round(float(p), 4)
                     for i, p in enumerate(probs)
                 },
                 "iso_anomaly_score": round(iso_score, 4),
