@@ -31,10 +31,8 @@ class Settings(BaseSettings):
     RATE_LIMIT_PER_MINUTE: int = 60
 
     # ── Model Paths ──────────────────────────────────────────────
-    NLP_MODEL_PATH: str = str(BASE_DIR / "models_store/nlp/distilbert_v2.pt")
-    # v3 FIX: fallback used by NLPService when the full checkpoint above
-    # isn't present yet — see NLPService lite mode in nlp_services.py.
-    NLP_LITE_MODEL_PATH: str = str(BASE_DIR / "models_store/nlp/nlp_lite.pkl")
+    NLP_MODEL_PATH: str = ""
+    NLP_LITE_MODEL_PATH: str = str(BASE_DIR / "backend/models/nlp_model.pkl")
     VISION_CLF_PATH: str = str(BASE_DIR / "models_store/vision/mobilenetv3_v2.pt")
     YOLO_PATH: str = str(BASE_DIR / "models_store/vision/yolov8n_logos_v2.pt")
     PHASH_DB_PATH: str = str(BASE_DIR / "models_store/vision/phash_db.pkl")
