@@ -8,6 +8,7 @@ import json
 import asyncio
 import traceback
 
+import redis.exceptions
 from loguru import logger
 
 
@@ -54,13 +55,10 @@ class BatchQueueService:
         return json.loads(raw)
 
     async def worker_loop(self, models: dict):
-
         logger.info("Batch queue worker started")
 
         while True:
-
             try:
-
                 logger.info("Waiting for Redis queue...")
 
                 item = await self.redis.brpop(
@@ -70,8 +68,8 @@ class BatchQueueService:
 
                 logger.info(f"Redis returned: {item}")
 
-                if not item:
-                    await asyncio.sleep(0.1)
+                # Nothing received during timeout
+                if item is None:
                     continue
 
                 _, raw = item
@@ -109,14 +107,15 @@ class BatchQueueService:
                     ),
                 )
 
-            except asyncio.CancelledError:
+            except redis.exceptions.TimeoutError:
+                # Expected when no job arrives within timeout.
+                continue
 
+            except asyncio.CancelledError:
                 logger.info("Queue worker cancelled")
                 break
 
             except Exception:
-
                 logger.exception("Queue worker crashed")
                 traceback.print_exc()
-
                 await asyncio.sleep(1)

@@ -1,0 +1,613 @@
+INFO:     Will watch for changes in these directories: ['/home/pogo_u/aidtect/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [192580] using WatchFiles
+INFO:     Started server process [192587]
+INFO:     Waiting for application startup.
+23:47:30 | INFO | =======================================================
+23:47:30 | INFO | AIDTECT v3.0 starting up...
+23:47:30 | INFO | =======================================================
+23:47:30 | INFO | Database tables created/verified
+23:47:30 | INFO | ✅ PostgreSQL + Redis connected
+23:47:30 | INFO | Loading AI models — please wait 30-60 seconds...
+/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator LogisticRegression from version 1.6.1 when using version 1.9.0. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+23:47:44 | WARNING | ⚠ Full NLP model not found.
+Running with LITE model:
+/home/pogo_u/aidtect/backend/models/nlp_model.pkl
+/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/open_clip/factory.py:450: UserWarning: QuickGELU mismatch between final model config (quick_gelu=False) and pretrained tag 'openai' (quick_gelu=True).
+  warnings.warn(
+23:48:00 | INFO | CLIP ViT-B/32 ready
+23:48:00 | INFO | Vision Service ready
+23:48:00 | INFO | Network Service ready
+23:48:02 | WARNING | MalBERT unavailable: MalayLab/MalBERT is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `hf auth login` or by passing `token=<your_token>`
+23:48:02 | INFO | Malware Service ready
+23:48:02 | INFO | Fusion Service ready (AttentionFusionEngine v3)
+23:48:02 | INFO | ✅ nlp model wrapped with SafeModel
+23:48:02 | INFO | ✅ vision model wrapped with SafeModel
+23:48:02 | INFO | ✅ network model wrapped with SafeModel
+23:48:02 | INFO | ✅ malware model wrapped with SafeModel
+23:48:02 | INFO | ✅ fusion model wrapped with SafeModel
+23:48:02 | INFO | ✅ drift model wrapped with SafeModel
+23:48:02 | INFO | ✅ AI models loaded (SecureBERT + CLIP + TabTransformer + MalBERT + AttentionFusion)
+23:48:02 | INFO | ✅ MITRE ATT&CK mapper ready
+23:48:02 | WARNING | Neo4j connection failed: Couldn't connect to localhost:7687 (resolved to ('127.0.0.1:7687',)):
+Failed to establish connection to ResolvedIPv4Address(('127.0.0.1', 7687)) (reason [Errno 111] Connection refused)
+23:48:02 | INFO | ✅ Knowledge graph (Neo4j) ready
+23:48:02 | INFO | ✅ EU AI Act compliance ready
+23:48:03 | INFO | ✅ STIX 2.1 ready
+23:48:03 | INFO | ✅ VirusTotal: no API key
+23:48:03 | INFO | CrowdStrike credentials not set — add to .env to enable
+23:48:03 | INFO | ✅ CrowdStrike: no credentials
+23:48:03 | INFO | Threat intel loaded: 0 URLs, 0 hashes
+23:48:03 | INFO | ✅ Threat intel: 0 URLs, 0 hashes
+23:48:03 | INFO | Screenshot service ready (Playwright)
+23:48:03 | INFO | ✅ Screenshot service ready (Playwright)
+23:48:03 | INFO | =======================================================
+23:48:03 | INFO | AIDTECT v3.0 fully operational ✅
+23:48:03 | INFO | Dashboard : http://localhost:3000
+23:48:03 | INFO | API Docs  : http://localhost:8000/docs
+23:48:03 | INFO | MLflow    : http://localhost:5000
+23:48:03 | INFO | Neo4j     : http://localhost:7474
+23:48:03 | INFO | =======================================================
+23:48:03 | INFO | Batch queue worker started
+23:48:03 | INFO | Waiting for Redis queue...
+INFO:     Application startup complete.
+23:48:08 | INFO | Redis returned: None
+23:48:08 | INFO | Waiting for Redis queue...
+23:48:13 | ERROR | Queue worker crashed
+Traceback (most recent call last):
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1286, in read_response
+    response = await self._read_response_from_parser(
+                     │    └ <function AbstractConnection._read_response_from_parser at 0x7e9abff6ae80>
+                     └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1335, in _read_response_from_parser
+    return await self._parser.read_response(
+                 │    └ <member '_parser' of 'AbstractConnection' objects>
+                 └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 358, in read_response
+    await self.read_from_socket()
+          │    └ <function _AsyncHiredisParser.read_from_socket at 0x7e9ac039ea20>
+          └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 335, in read_from_socket
+    buffer = await self._stream.read(self._read_size)
+                   │    │            │    └ <member '_read_size' of 'AsyncBaseParser' objects>
+                   │    │            └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+                   │    └ <member '_stream' of 'AsyncBaseParser' objects>
+                   └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+  File "/usr/lib/python3.11/asyncio/streams.py", line 711, in read
+    await self._wait_for_data('read')
+          │    └ <function StreamReader._wait_for_data at 0x7e9ac41aa340>
+          └ <StreamReader transport=<TCPTransport closed=False reading=False 0x60cde830>>
+  File "/usr/lib/python3.11/asyncio/streams.py", line 543, in _wait_for_data
+    await self._waiter
+          │    └ None
+          └ <StreamReader transport=<TCPTransport closed=False reading=False 0x60cde830>>
+
+asyncio.exceptions.CancelledError
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1283, in read_response
+    async with timeout_context as active_timeout:
+               │                  └ <Timeout [expired]>
+               └ <Timeout [expired]>
+  File "/usr/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+                            └ CancelledError()
+
+TimeoutError
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 4
+               │     └ 7
+               └ <function _main at 0x7e9ac4afe200>
+  File "/usr/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 4
+           │    └ <function BaseProcess._bootstrap at 0x7e9ac4bd37e0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/usr/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x7e9ac4bd2d40>
+    └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/usr/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x7e9ac493ea90>, 'target': <bound method Server.run of <uvicorn.server.Server obj...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+    │    └ <function subprocess_started at 0x7e9ac3e6a980>
+    └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x7e9ac3c26bd0>>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/server.py", line 77, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x7e9ac3f1a340>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x7e9ac493ea90>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x7e9ac3c26bd0>
+           │           │    │             └ [<socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x7e9ac3e69800>
+           │           └ <uvicorn.server.Server object at 0x7e9ac3c26bd0>
+           └ <function asyncio_run at 0x7e9ac40ef380>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/_compat.py", line 30, in asyncio_run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x7e9ac4a66a70>
+           │      └ <function Runner.run at 0x7e9ac41971a0>
+           └ <asyncio.runners.Runner object at 0x7e9ac3c1be10>
+  File "/usr/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn...
+           │    │     └ <cyfunction Loop.run_until_complete at 0x7e9ac3deb700>
+           │    └ <uvloop.Loop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x7e9ac3c1be10>
+
+> File "/home/pogo_u/aidtect/backend/services/batch_queue_service.py", line 66, in worker_loop
+    item = await self.redis.brpop(
+                 │    │     └ <function ListCommands.brpop at 0x7e9abfbb8360>
+                 │    └ <redis.asyncio.client.Redis(<redis.asyncio.connection.ConnectionPool(<redis.asyncio.connection.Connection(encoding=utf-8,deco...
+                 └ <services.batch_queue_service.BatchQueueService object at 0x7e997e3c9810>
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+                   │    │     └ <function Retry.call_with_retry at 0x7e9abff37240>
+                   │    └ <redis.asyncio.retry.Retry object at 0x7e997e6aa850>
+                   └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 81, in call_with_retry
+    raise error
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 69, in call_with_retry
+    return await do()
+                 └ <function Redis.execute_command.<locals>.<lambda> at 0x7e997dba22a0>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 871, in _send_command_parse_response
+    return await self.parse_response(conn, command_name, **options)
+                 │    │              │     │               └ {}
+                 │    │              │     └ 'BRPOP'
+                 │    │              └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+                 │    └ <function Redis.parse_response at 0x7e9abf743ce0>
+                 └ <redis.asyncio.client.Redis(<redis.asyncio.connection.ConnectionPool(<redis.asyncio.connection.Connection(encoding=utf-8,deco...
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 993, in parse_response
+    response = await connection.read_response()
+                     │          └ <function AbstractConnection.read_response at 0x7e9abff6ade0>
+                     └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1310, in read_response
+    raise TimeoutError(f"Timeout reading from {host_error}")
+          └ <class 'redis.exceptions.TimeoutError'>
+
+redis.exceptions.TimeoutError: Timeout reading from localhost:6379
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1286, in read_response
+    response = await self._read_response_from_parser(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1335, in _read_response_from_parser
+    return await self._parser.read_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 358, in read_response
+    await self.read_from_socket()
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 335, in read_from_socket
+    buffer = await self._stream.read(self._read_size)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/streams.py", line 711, in read
+    await self._wait_for_data('read')
+  File "/usr/lib/python3.11/asyncio/streams.py", line 543, in _wait_for_data
+    await self._waiter
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1283, in read_response
+    async with timeout_context as active_timeout:
+  File "/usr/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/backend/services/batch_queue_service.py", line 66, in worker_loop
+    item = await self.redis.brpop(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 81, in call_with_retry
+    raise error
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 871, in _send_command_parse_response
+    return await self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 993, in parse_response
+    response = await connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1310, in read_response
+    raise TimeoutError(f"Timeout reading from {host_error}")
+redis.exceptions.TimeoutError: Timeout reading from localhost:6379
+23:48:14 | INFO | Waiting for Redis queue...
+23:48:19 | ERROR | Queue worker crashed
+Traceback (most recent call last):
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1286, in read_response
+    response = await self._read_response_from_parser(
+                     │    └ <function AbstractConnection._read_response_from_parser at 0x7e9abff6ae80>
+                     └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1335, in _read_response_from_parser
+    return await self._parser.read_response(
+                 │    └ <member '_parser' of 'AbstractConnection' objects>
+                 └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 358, in read_response
+    await self.read_from_socket()
+          │    └ <function _AsyncHiredisParser.read_from_socket at 0x7e9ac039ea20>
+          └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 335, in read_from_socket
+    buffer = await self._stream.read(self._read_size)
+                   │    │            │    └ <member '_read_size' of 'AsyncBaseParser' objects>
+                   │    │            └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+                   │    └ <member '_stream' of 'AsyncBaseParser' objects>
+                   └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+  File "/usr/lib/python3.11/asyncio/streams.py", line 711, in read
+    await self._wait_for_data('read')
+          │    └ <function StreamReader._wait_for_data at 0x7e9ac41aa340>
+          └ <StreamReader transport=<TCPTransport closed=False reading=False 0x60e61900>>
+  File "/usr/lib/python3.11/asyncio/streams.py", line 543, in _wait_for_data
+    await self._waiter
+          │    └ None
+          └ <StreamReader transport=<TCPTransport closed=False reading=False 0x60e61900>>
+
+asyncio.exceptions.CancelledError
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1283, in read_response
+    async with timeout_context as active_timeout:
+               │                  └ <Timeout [expired]>
+               └ <Timeout [expired]>
+  File "/usr/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+                            └ CancelledError()
+
+TimeoutError
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 4
+               │     └ 7
+               └ <function _main at 0x7e9ac4afe200>
+  File "/usr/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 4
+           │    └ <function BaseProcess._bootstrap at 0x7e9ac4bd37e0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/usr/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x7e9ac4bd2d40>
+    └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/usr/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x7e9ac493ea90>, 'target': <bound method Server.run of <uvicorn.server.Server obj...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+    │    └ <function subprocess_started at 0x7e9ac3e6a980>
+    └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x7e9ac3c26bd0>>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/server.py", line 77, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x7e9ac3f1a340>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x7e9ac493ea90>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x7e9ac3c26bd0>
+           │           │    │             └ [<socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x7e9ac3e69800>
+           │           └ <uvicorn.server.Server object at 0x7e9ac3c26bd0>
+           └ <function asyncio_run at 0x7e9ac40ef380>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/_compat.py", line 30, in asyncio_run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x7e9ac4a66a70>
+           │      └ <function Runner.run at 0x7e9ac41971a0>
+           └ <asyncio.runners.Runner object at 0x7e9ac3c1be10>
+  File "/usr/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn...
+           │    │     └ <cyfunction Loop.run_until_complete at 0x7e9ac3deb700>
+           │    └ <uvloop.Loop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x7e9ac3c1be10>
+
+> File "/home/pogo_u/aidtect/backend/services/batch_queue_service.py", line 66, in worker_loop
+    item = await self.redis.brpop(
+                 │    │     └ <function ListCommands.brpop at 0x7e9abfbb8360>
+                 │    └ <redis.asyncio.client.Redis(<redis.asyncio.connection.ConnectionPool(<redis.asyncio.connection.Connection(encoding=utf-8,deco...
+                 └ <services.batch_queue_service.BatchQueueService object at 0x7e997e3c9810>
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+                   │    │     └ <function Retry.call_with_retry at 0x7e9abff37240>
+                   │    └ <redis.asyncio.retry.Retry object at 0x7e997e6aa850>
+                   └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 81, in call_with_retry
+    raise error
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 69, in call_with_retry
+    return await do()
+                 └ <function Redis.execute_command.<locals>.<lambda> at 0x7e997dba25c0>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 871, in _send_command_parse_response
+    return await self.parse_response(conn, command_name, **options)
+                 │    │              │     │               └ {}
+                 │    │              │     └ 'BRPOP'
+                 │    │              └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+                 │    └ <function Redis.parse_response at 0x7e9abf743ce0>
+                 └ <redis.asyncio.client.Redis(<redis.asyncio.connection.ConnectionPool(<redis.asyncio.connection.Connection(encoding=utf-8,deco...
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 993, in parse_response
+    response = await connection.read_response()
+                     │          └ <function AbstractConnection.read_response at 0x7e9abff6ade0>
+                     └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1310, in read_response
+    raise TimeoutError(f"Timeout reading from {host_error}")
+          └ <class 'redis.exceptions.TimeoutError'>
+
+redis.exceptions.TimeoutError: Timeout reading from localhost:6379
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1286, in read_response
+    response = await self._read_response_from_parser(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1335, in _read_response_from_parser
+    return await self._parser.read_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 358, in read_response
+    await self.read_from_socket()
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 335, in read_from_socket
+    buffer = await self._stream.read(self._read_size)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/streams.py", line 711, in read
+    await self._wait_for_data('read')
+  File "/usr/lib/python3.11/asyncio/streams.py", line 543, in _wait_for_data
+    await self._waiter
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1283, in read_response
+    async with timeout_context as active_timeout:
+  File "/usr/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/backend/services/batch_queue_service.py", line 66, in worker_loop
+    item = await self.redis.brpop(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 81, in call_with_retry
+    raise error
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 871, in _send_command_parse_response
+    return await self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 993, in parse_response
+    response = await connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1310, in read_response
+    raise TimeoutError(f"Timeout reading from {host_error}")
+redis.exceptions.TimeoutError: Timeout reading from localhost:6379
+23:48:20 | INFO | Waiting for Redis queue...
+23:48:25 | ERROR | Queue worker crashed
+Traceback (most recent call last):
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1286, in read_response
+    response = await self._read_response_from_parser(
+                     │    └ <function AbstractConnection._read_response_from_parser at 0x7e9abff6ae80>
+                     └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1335, in _read_response_from_parser
+    return await self._parser.read_response(
+                 │    └ <member '_parser' of 'AbstractConnection' objects>
+                 └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 358, in read_response
+    await self.read_from_socket()
+          │    └ <function _AsyncHiredisParser.read_from_socket at 0x7e9ac039ea20>
+          └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 335, in read_from_socket
+    buffer = await self._stream.read(self._read_size)
+                   │    │            │    └ <member '_read_size' of 'AsyncBaseParser' objects>
+                   │    │            └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+                   │    └ <member '_stream' of 'AsyncBaseParser' objects>
+                   └ <redis._parsers.hiredis._AsyncHiredisParser object at 0x7e997db965d0>
+  File "/usr/lib/python3.11/asyncio/streams.py", line 711, in read
+    await self._wait_for_data('read')
+          │    └ <function StreamReader._wait_for_data at 0x7e9ac41aa340>
+          └ <StreamReader transport=<TCPTransport closed=False reading=False 0x60edbb70>>
+  File "/usr/lib/python3.11/asyncio/streams.py", line 543, in _wait_for_data
+    await self._waiter
+          │    └ None
+          └ <StreamReader transport=<TCPTransport closed=False reading=False 0x60edbb70>>
+
+asyncio.exceptions.CancelledError
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1283, in read_response
+    async with timeout_context as active_timeout:
+               │                  └ <Timeout [expired]>
+               └ <Timeout [expired]>
+  File "/usr/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+                            └ CancelledError()
+
+TimeoutError
+
+
+During handling of the above exception, another exception occurred:
+
+
+Traceback (most recent call last):
+
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python3.11/multiprocessing/spawn.py", line 122, in spawn_main
+    exitcode = _main(fd, parent_sentinel)
+               │     │   └ 4
+               │     └ 7
+               └ <function _main at 0x7e9ac4afe200>
+  File "/usr/lib/python3.11/multiprocessing/spawn.py", line 135, in _main
+    return self._bootstrap(parent_sentinel)
+           │    │          └ 4
+           │    └ <function BaseProcess._bootstrap at 0x7e9ac4bd37e0>
+           └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/usr/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+    │    └ <function BaseProcess.run at 0x7e9ac4bd2d40>
+    └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/usr/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    │    │        │    │        │    └ {'config': <uvicorn.config.Config object at 0x7e9ac493ea90>, 'target': <bound method Server.run of <uvicorn.server.Server obj...
+    │    │        │    │        └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+    │    │        │    └ ()
+    │    │        └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+    │    └ <function subprocess_started at 0x7e9ac3e6a980>
+    └ <SpawnProcess name='SpawnProcess-1' parent=192580 started>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    │              └ [<socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 8000)>]
+    └ <bound method Server.run of <uvicorn.server.Server object at 0x7e9ac3c26bd0>>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/server.py", line 77, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+           │           │    │             │                      │    │      └ <function Config.get_loop_factory at 0x7e9ac3f1a340>
+           │           │    │             │                      │    └ <uvicorn.config.Config object at 0x7e9ac493ea90>
+           │           │    │             │                      └ <uvicorn.server.Server object at 0x7e9ac3c26bd0>
+           │           │    │             └ [<socket.socket fd=3, family=2, type=1, proto=0, laddr=('127.0.0.1', 8000)>]
+           │           │    └ <function Server.serve at 0x7e9ac3e69800>
+           │           └ <uvicorn.server.Server object at 0x7e9ac3c26bd0>
+           └ <function asyncio_run at 0x7e9ac40ef380>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn/_compat.py", line 30, in asyncio_run
+    return runner.run(main)
+           │      │   └ <coroutine object Server.serve at 0x7e9ac4a66a70>
+           │      └ <function Runner.run at 0x7e9ac41971a0>
+           └ <asyncio.runners.Runner object at 0x7e9ac3c1be10>
+  File "/usr/lib/python3.11/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           │    │     │                  └ <Task pending name='Task-1' coro=<Server.serve() running at /home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/uvicorn...
+           │    │     └ <cyfunction Loop.run_until_complete at 0x7e9ac3deb700>
+           │    └ <uvloop.Loop running=True closed=False debug=False>
+           └ <asyncio.runners.Runner object at 0x7e9ac3c1be10>
+
+> File "/home/pogo_u/aidtect/backend/services/batch_queue_service.py", line 66, in worker_loop
+    item = await self.redis.brpop(
+                 │    │     └ <function ListCommands.brpop at 0x7e9abfbb8360>
+                 │    └ <redis.asyncio.client.Redis(<redis.asyncio.connection.ConnectionPool(<redis.asyncio.connection.Connection(encoding=utf-8,deco...
+                 └ <services.batch_queue_service.BatchQueueService object at 0x7e997e3c9810>
+
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+                   │    │     └ <function Retry.call_with_retry at 0x7e9abff37240>
+                   │    └ <redis.asyncio.retry.Retry object at 0x7e997e6aa850>
+                   └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 81, in call_with_retry
+    raise error
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 69, in call_with_retry
+    return await do()
+                 └ <function Redis.execute_command.<locals>.<lambda> at 0x7e997dba22a0>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 871, in _send_command_parse_response
+    return await self.parse_response(conn, command_name, **options)
+                 │    │              │     │               └ {}
+                 │    │              │     └ 'BRPOP'
+                 │    │              └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+                 │    └ <function Redis.parse_response at 0x7e9abf743ce0>
+                 └ <redis.asyncio.client.Redis(<redis.asyncio.connection.ConnectionPool(<redis.asyncio.connection.Connection(encoding=utf-8,deco...
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 993, in parse_response
+    response = await connection.read_response()
+                     │          └ <function AbstractConnection.read_response at 0x7e9abff6ade0>
+                     └ <redis.asyncio.connection.Connection(host=localhost,port=6379,db=0)>
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1310, in read_response
+    raise TimeoutError(f"Timeout reading from {host_error}")
+          └ <class 'redis.exceptions.TimeoutError'>
+
+redis.exceptions.TimeoutError: Timeout reading from localhost:6379
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1286, in read_response
+    response = await self._read_response_from_parser(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1335, in _read_response_from_parser
+    return await self._parser.read_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 358, in read_response
+    await self.read_from_socket()
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/_parsers/hiredis.py", line 335, in read_from_socket
+    buffer = await self._stream.read(self._read_size)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/asyncio/streams.py", line 711, in read
+    await self._wait_for_data('read')
+  File "/usr/lib/python3.11/asyncio/streams.py", line 543, in _wait_for_data
+    await self._waiter
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1283, in read_response
+    async with timeout_context as active_timeout:
+  File "/usr/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pogo_u/aidtect/backend/services/batch_queue_service.py", line 66, in worker_loop
+    item = await self.redis.brpop(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 81, in call_with_retry
+    raise error
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 871, in _send_command_parse_response
+    return await self.parse_response(conn, command_name, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/client.py", line 993, in parse_response
+    response = await connection.read_response()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pogo_u/aidtect/venv311/lib/python3.11/site-packages/redis/asyncio/connection.py", line 1310, in read_response
+    raise TimeoutError(f"Timeout reading from {host_error}")
+redis.exceptions.TimeoutError: Timeout reading from localhost:6379
+23:48:27 | INFO | Waiting for Redis queue...

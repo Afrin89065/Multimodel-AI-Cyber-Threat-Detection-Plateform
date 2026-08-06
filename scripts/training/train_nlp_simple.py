@@ -1,57 +1,74 @@
 import pandas as pd
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_val_score
-from sklearn.metrics import classification_report, confusion_matrix
 import pickle
 from pathlib import Path
-from loguru import logger
 
-print("🧠 TRAINING NLP MODEL (Simple Logistic Regression)")
-print("=" * 80)
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
 
-try:
-    # Load data
-    print("\n1️⃣ Loading NLP data...")
-    df_train = pd.read_csv('datasets/processed/nlp/train.csv')
-    df_test = pd.read_csv('datasets/processed/nlp/test.csv')
-    
-    print(f"  ✅ Train: {len(df_train)} samples")
-    print(f"  ✅ Test: {len(df_test)} samples")
-    
-    # Use simple features we created
-    X_train = df_train[['len', 'at_count', 'slash_count']]
-    y_train = df_train['label']
-    
-    X_test = df_test[['len', 'at_count', 'slash_count']]
-    y_test = df_test['label']
-    
-    # Train simple logistic regression
-    print("\n2️⃣ Training Logistic Regression...")
-    model = LogisticRegression(max_iter=1000, random_state=42)
-    model.fit(X_train, y_train)
-    
-    # Evaluate
-    train_acc = model.score(X_train, y_train)
-    test_acc = model.score(X_test, y_test)
-    
-    print(f"\n  ✅ Training Accuracy:  {train_acc*100:.2f}%")
-    print(f"  ✅ Testing Accuracy:   {test_acc*100:.2f}%")
-    print(f"  ✅ Overfitting Gap:    {(train_acc-test_acc)*100:.2f}%")
-    
-    # Cross-validation
-    print("\n3️⃣ Cross-validation:")
-    cv_scores = cross_val_score(model, X_train, y_train, cv=5)
-    print(f"  CV Mean: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})")
-    
-    # Save
-    Path('backend/models').mkdir(parents=True, exist_ok=True)
-    pickle.dump(model, open('backend/models/nlp_model.pkl', 'wb'))
-    
-    print("\n✅ NLP MODEL SAVED!")
+from backend.services.nlp_services import extract_url_features
 
-except Exception as e:
-    print(f"\n❌ Error: {e}")
-    import traceback
-    traceback.print_exc()
+# -----------------------------
+# Change this path
+# -----------------------------
+DATASET = "datasets/raw/email/CEAS_08.csv"
+
+df = pd.read_csv(DATASET)
+
+# -----------------------------
+# Auto-detect URL column
+# -----------------------------
+url_col = None
+
+for c in df.columns:
+    if "url" in c.lower():
+        url_col = c
+        break
+
+if url_col is None:
+    raise Exception("No URL column found.")
+
+# -----------------------------
+# Auto-detect label column
+# -----------------------------
+label_col = None
+
+for c in df.columns:
+    if "label" in c.lower():
+        label_col = c
+        break
+
+if label_col is None:
+    raise Exception("No label column found.")
+
+X = []
+y = []
+
+for _, row in df.iterrows():
+    X.append(extract_url_features(str(row[url_col])))
+    y.append(int(row[label_col]))
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+)
+
+model = LogisticRegression(
+    max_iter=2000,
+    class_weight="balanced"
+)
+
+model.fit(X_train, y_train)
+
+print(classification_report(y_test, model.predict(X_test)))
+
+save_dir = Path("models_store/nlp")
+save_dir.mkdir(parents=True, exist_ok=True)
+
+with open(save_dir / "nlp_lite.pkl", "wb") as f:
+    pickle.dump(model, f)
+
+print("\nSaved:")
+print(save_dir / "nlp_lite.pkl")
